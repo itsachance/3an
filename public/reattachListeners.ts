@@ -49,4 +49,3 @@ function reattachListeners(): void {
 }
 // Make function available globally
 (window as any).reattachListeners = reattachListeners;
-

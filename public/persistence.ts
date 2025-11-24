@@ -25,7 +25,7 @@ function saveGameState(): void {
     const preGameDisplay: HTMLElement | null = document.getElementById('preGameDisplay');
 
     if (!activePlayerList || !preGameDisplay) return;
-
+    
     const state: GameState = {
         activePlayersHTML: activePlayerList.innerHTML,
         internalCounter: internalCounter,
@@ -34,9 +34,9 @@ function saveGameState(): void {
         currentDealerIndex: currentDealerIndex,
         activePlayerListLength: activePlayerListLength,
         possibleDealerIndex: possibleDealerIndex,
-        gameStarted: preGameDisplay.classList.contains('hidden')
+        gameStarted: !preGameDisplay.classList.contains('hidden')
     };
-
+    
     localStorage.setItem('gameState', JSON.stringify(state));
 }
 
@@ -61,7 +61,7 @@ function loadGameState(): void {
     currentDealerIndex = state.currentDealerIndex;
     activePlayerListLength = state.activePlayerListLength;
     possibleDealerIndex = state.possibleDealerIndex;
-
+    
     // Restore HTML
     const activePlayerList: HTMLElement | null = document.getElementById('activePlayerList');
     if (activePlayerList) {
@@ -72,7 +72,6 @@ function loadGameState(): void {
     // Restore UI if game was started
     if (state.gameStarted) {
         console.log('Game was started, restoring UI...');
-
         if (countLabel) {
             countLabel.textContent = `Current round: ${count}`;
             countLabel.classList.remove('countLabelHidden');
