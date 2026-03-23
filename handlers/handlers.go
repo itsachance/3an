@@ -3,18 +3,21 @@ package handlers
 import (
 	"net/http"
 	"text/template"
+
+	"github.com/ItsAchance/3an/internal/models"
 )
 
+type Application struct {
+	SnippetModel *models.SnippetModel
+}
 
-func Home(w http.ResponseWriter, r *http.Request) {
+func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
 	tmlp := template.Must(template.ParseFiles("./ui/html/index.html"))
 	tmlp.Execute(w, nil)
 }
 
-func Highscore(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("This is the highscore"))
+func (app *Application) Highscore(w http.ResponseWriter, r *http.Request) {
 
 	// tmlp := template.Must(template.ParseFiles("./ui/html/index.html"))
 	// tmlp.Execute(w, nil)
 }
-
