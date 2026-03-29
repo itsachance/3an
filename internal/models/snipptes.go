@@ -6,18 +6,7 @@ import (
 	"log"
 	"time"
 
-	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
-)
-
-const (
-	host     = "dockerdebian.achance.se"
-	port     = 54321
-	user     = "postgre"
-	password = "postgre"
-	//	user     = "POSTGRES-USERNAME"
-	//	password = "POSTGRES-PASSWORD"
-	dbname = "trean"
 )
 
 type Snippet struct {
@@ -45,16 +34,17 @@ func (m *SnippetModel) GetHighscore() {
 	fmt.Printf("Result: %v\n", query)
 }
 
-func createDb() {
+func CreateDb() {
 	// Connect to DB
 	db, err := sql.Open("sqlite3", "file:trean.db?_journal_mode=WAL&_synchronous=NORMAL")
 	if err != nil {
 		log.Printf("An error has occured: %s\n", err)
 	}
 	defer db.Close()
+	CreateScoreboardTable(db)
 }
 
-func createScoreboardTable(db *sql.DB) {
+func CreateScoreboardTable(db *sql.DB) {
 	query := `CREATE TABLE IF NOT EXISTS scoreboard(
 		id INTEGER PRIMARY KEY,
 		name TEXT NOT NULL UNIQUE,
@@ -65,34 +55,4 @@ func createScoreboardTable(db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func Db() {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("Successfully connected!")
-
-	var score int
-	var name string
-
-	query := `SELECT score, name FROM scoreboard WHERE score = (SELECT MIN(SCORE) FROM scoreboard)`
-	err = db.QueryRow(query).Scan(&score, &name)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Err %v:", err)
-
-	fmt.Printf("Result: %v\n", query)
 }
