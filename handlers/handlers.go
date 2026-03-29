@@ -18,6 +18,6 @@ func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
 
 func (app *Application) Highscore(w http.ResponseWriter, r *http.Request) {
 
-	// tmlp := template.Must(template.ParseFiles("./ui/html/index.html"))
-	// tmlp.Execute(w, nil)
+	tmlp := template.Must(template.ParseFiles("./ui/html/index.html"))
+	tmlp.Execute(w, nil)
 }
