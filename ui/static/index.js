@@ -17,6 +17,7 @@ const dealerTag = '* ';
 let activePlayerListLength;
 let possibleDealerIndex;
 let currentDealerIndex = 0;
+let highScoreLoaded = false;
 
 // Game state management
 let gameDataToSave = {
@@ -211,7 +212,7 @@ const saveGame = () => {
                 'score': cleanScore
             };
         }
-        fetch("/", {
+        fetch("/save-score", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ gameStats })
@@ -222,24 +223,27 @@ const saveGame = () => {
 // Get highscore button
 const getHighScore = () => {
     document.querySelector('#highScoreBtn').addEventListener('click', async () => {
-        try {
-            const response = await fetch('/get-score');
-            const data = await response.json();
+        if (!highScoreLoaded) {
+            try {
+                const response = await fetch('/get-score');
+                const data = await response.json();
 
-            const getScoreDiv = document.createElement('div');
-            getScoreDiv.className = 'container';
+                const getScoreDiv = document.createElement('div');
+                getScoreDiv.className = 'container';
 
-            const scoreParagraph = document.createElement('p');
-            scoreParagraph.id = 'scoreBox';
-            scoreParagraph.textContent = `Best score: ${data.name} — with: ${data.score}`;
+                const scoreParagraph = document.createElement('p');
+                scoreParagraph.id = 'scoreBox';
+                scoreParagraph.textContent = `Best score: ${data.name} with: ${data.score}`;
 
-            getScoreDiv.appendChild(scoreParagraph);
+                getScoreDiv.appendChild(scoreParagraph);
 
-            const target = document.querySelector('#highScoreDiv');
-            target.parentNode.insertBefore(getScoreDiv, target.nextSibling);
+                const target = document.querySelector('#highScoreDiv');
+                target.parentNode.insertBefore(getScoreDiv, target.nextSibling);
+                highScoreLoaded = true;
 
-        } catch (err) {
-            console.error('Failed to fetch score:', err);
+            } catch (err) {
+                console.error('Failed to fetch score:', err);
+            }
         }
     });
 };
