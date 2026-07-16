@@ -1,0 +1,10 @@
+-- +goose Up
+CREATE TABLE IF NOT EXISTS scoreboard (
+id INTEGER PRIMARY KEY,
+name TEXT NOT NULL,
+score INTEGER NOT NULL,
+created DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- +goose Down
+DROP TABLE scoreboard;
