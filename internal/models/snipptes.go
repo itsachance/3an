@@ -14,11 +14,11 @@ type Score struct {
 	Created time.Time
 }
 
-type ScoreModel struct {
+type DBModel struct {
 	DB *sql.DB
 }
 
-func (m *ScoreModel) GetHighscore() (string, int) {
+func (m *DBModel) GetHighscore() (string, int) {
 	db := m.DB
 	var score int
 	var name string
@@ -32,7 +32,7 @@ func (m *ScoreModel) GetHighscore() (string, int) {
 	return name, score
 }
 
-func (m *ScoreModel) SaveScore(Savedscore *Score) error {
+func (m *DBModel) SaveScore(Savedscore *Score) error {
 	db := m.DB
 	data := &Score{
 		Name:  Savedscore.Name,
