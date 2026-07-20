@@ -4,3 +4,9 @@ node_modules
 npm-debug.log
 Dockerfile
 .dockerignore
+Containerfile
+Makefile
+*.md
+db/
+ui/static/*.ts
+ui/static/tsconfig.json
