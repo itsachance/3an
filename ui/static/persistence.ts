@@ -9,13 +9,6 @@ interface GameState {
     gameStarted: boolean;
 }
 
-// Declare globals from index.js so TypeScript knows they exist
-declare let internalCounter: number;
-declare let count: number;
-declare let playerIndex: number;
-declare let currentDealerIndex: number;
-declare let activePlayerListLength: number;
-declare let possibleDealerIndex: number;
 declare let countLabel: HTMLElement;
 
 declare function reattachListeners(): void;
