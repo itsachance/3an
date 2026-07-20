@@ -9,7 +9,7 @@ import (
 
 func Routes(db *sql.DB) *http.ServeMux {
 	app := &Application{
-		ScoreModel: &models.ScoreModel{
+		DBModel: &models.DBModel{
 			DB: db,
 		},
 	}
