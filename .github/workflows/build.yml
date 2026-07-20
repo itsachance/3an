@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: trean-runners
+    env:
+      CONTAINER_ENGINE: docker
     steps:
       - name: Install make
         run: sudo apt-get update && sudo apt-get install -y make
@@ -18,5 +20,3 @@ jobs:
           password: ${{ secrets.CONTAINER_PUSH_SECRET }}
       - name: Build and tag the Docker image
         run: make container-push VERSION=${GITHUB_REF#refs/tags/}
-        env:
-          CONTAINER_ENGINE: docker
