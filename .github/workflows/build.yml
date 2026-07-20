@@ -1,0 +1,20 @@
+name: Image CI
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+jobs:
+  build:
+    runs-on: trean-runners
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CONTAINER_PUSH_SECRET }}
+      - name: Build and tag the Docker image
+        run: make container-push VERSION=${GITHUB_REF#refs/tags/}
+        env:
+          CONTAINER_ENGINE: docker
