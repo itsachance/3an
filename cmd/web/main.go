@@ -4,27 +4,22 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/ncruces/go-sqlite3/driver"
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "file:trean.db?_journal_mode=WAL&_synchronous=NORMAL")
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "trean.db"
+	}
+	dsn := "file:" + dbPath + "?_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)"
+	db, err := sql.Open("sqlite3", dsn)
 	if err != nil {
-		log.Printf("An error has occured: %s\n", err)
+		log.Fatalf("An error has occured: %v\n", err)
 	}
 	defer db.Close()
-
-	query := `CREATE TABLE IF NOT EXISTS scoreboard(
-		id INTEGER PRIMARY KEY,
-		name TEXT NOT NULL UNIQUE,
-		score INTEGER NOT NULL,
-		created DATETIME DEFAULT CURRENT_TIMESTAMP);`
-
-	_, err = db.Exec(query)
-	if err != nil {
-		log.Printf("SQL table couldn't be created: %v", err)
-	}
 
 	log.Printf("%s", "Listening on http://localhost:5500")
 	err = http.ListenAndServe(":5500", Routes(db))
