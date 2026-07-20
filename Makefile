@@ -2,7 +2,7 @@ DB_PATH=./trean.db
 MIG_DIR=./db/migrations
 BIN_NAME=trean
 IMAGE_NAME=trean:latest
-CONTAINER_ENGINE=podman
+CONTAINER_ENGINE ?= podman
 VERSION ?= dev
 
 .PHONY: all build clean container-build container-run container-clean container-push ts-compile db-status db-up db-down db-redo db-create
