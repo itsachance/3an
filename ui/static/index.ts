@@ -1,7 +1,7 @@
-const increaseBtn = document.getElementById("increaseBtn");
-const decreaseBtn = document.getElementById("decreaseBtn");
-const resetBtn = document.getElementById("resetBtn");
-const submitBtn = document.getElementById("submitBtn");
+const increaseBtn = document.getElementById("increaseBtn")!;
+const decreaseBtn = document.getElementById("decreaseBtn")!;
+const resetBtn = document.getElementById("resetBtn")!;
+const submitBtn = document.getElementById("submitBtn")!;
 
 // Game starts at round 3, hence the name
 const defaultRound = 3;
@@ -12,10 +12,11 @@ let internalCounter = 3;
 // Round to be displayed
 let count = 3;
 
+let activePlayerList: HTMLElement;
 let playerIndex = 0;
 const dealerTag = '* ';
-let activePlayerListLength;
-let possibleDealerIndex;
+let activePlayerListLength: number;
+let possibleDealerIndex: number;
 let currentDealerIndex = 0;
 let highScoreLoaded = false;
 
@@ -28,14 +29,14 @@ let gameDataToSave = {
 
 // Start game button
 const startGame = () => {
-    const startGameBtn = document.querySelector('#start-btn');
+    const startGameBtn = document.querySelector('#start-btn')!;
     startGameBtn.addEventListener('click', () => {
         countLabel.textContent = `Current round: ${count}`;
         startGameBtn.classList.toggle('hidden');
-        document.getElementById('preGameDisplay').classList.toggle('hidden')
-        document.querySelector('#countLabel').classList.toggle('countLabelHidden');
-        document.querySelector('#countLabel').classList.add('countLabel');
-        activePlayerList = document.getElementById("activePlayerList");
+        document.getElementById('preGameDisplay')!.classList.toggle('hidden')
+        document.querySelector('#countLabel')!.classList.toggle('countLabelHidden');
+        document.querySelector('#countLabel')!.classList.add('countLabel');
+        activePlayerList = document.getElementById("activePlayerList")!;
         activePlayerListLength = activePlayerList.childElementCount;
         possibleDealerIndex = activePlayerListLength - 1;
         whoIsDealer();
@@ -67,13 +68,13 @@ increaseBtn.onclick = function() {
 
     // Switch the dealer tag to the next player and remove it from the "old" dealer
     for (let i = 0; i < activePlayerListLength; i++) {
-        let dealerIndex = document.getElementById(i);
+        let dealerIndex = document.getElementById(String(i));
         if (dealerIndex) {
-            dealerIndex.textContent = dealerIndex.textContent.replace(/\* /g, '');
+            dealerIndex.textContent = dealerIndex.textContent!.replace(/\* /g, '');
         }
     }
     // ???
-    document.getElementById(currentDealerIndex).textContent = dealerTag + document.getElementById(currentDealerIndex).textContent;
+    document.getElementById(String(currentDealerIndex))!.textContent = dealerTag + document.getElementById(String(currentDealerIndex))!.textContent;
 
     // Make the buttons the normal color again
     let submitMathBtns = document.querySelectorAll('.submitMathBtns');
@@ -88,7 +89,7 @@ increaseBtn.onclick = function() {
 // Save game data to localStorage
 function saveToStorage() {
     try {
-        localStorage.setItem('scoringGameData', JSON.stringify(gameData));
+        localStorage.setItem('scoringGameData', JSON.stringify(gameDataToSave));
         console.log('Game saved to localStorage');
     } catch (error) {
         console.log('localStorage not available - data stored in memory only');
@@ -103,18 +104,18 @@ resetBtn.onclick = function() {
         internalCounter = 3;
         countLabel.textContent = "Current round: " + count;
 
-        // Clear all player containers
-        const activePlayerList = document.getElementById("activePlayerList");
-        activePlayerList.innerHTML = ""; // Removes all child elements
+    // Clear all player containers
+    const activePlayerList = document.getElementById("activePlayerList")!;
+    activePlayerList.innerHTML = ""; // Removes all child elements
 
-        // Kind of reset to start state
-        document.querySelector('#preGameDisplay').classList.toggle('hidden');
-        document.querySelector('#start-btn').classList.toggle('hidden');
+    // Kind of reset to start state
+    document.querySelector('#preGameDisplay')!.classList.toggle('hidden');
+    document.querySelector('#start-btn')!.classList.toggle('hidden');
 
-        document.querySelector('#countLabel').classList.toggle('countLabel');
-        document.querySelector('#countLabel').classList.add('countLabelHidden');
-        playerIndex = 0;
-        localStorage.removeItem('gameState');
+    document.querySelector('#countLabel')!.classList.toggle('countLabel');
+    document.querySelector('#countLabel')!.classList.add('countLabelHidden');
+    playerIndex = 0;
+    localStorage.removeItem('gameState');
 
     }
     else {
@@ -124,7 +125,7 @@ resetBtn.onclick = function() {
 
 // Add player button functionality
 submitBtn.onclick = function() {
-    const playerName = document.getElementById("playerTextbox").value.trim();
+    const playerName = (document.getElementById("playerTextbox") as HTMLInputElement).value.trim();
     if (!playerName) {
         alert("Please enter a player name.");
         return;
@@ -136,7 +137,7 @@ submitBtn.onclick = function() {
 
     const playerLabel = document.createElement("label");
     playerLabel.textContent = playerName;
-    playerLabel.id = playerIndex;
+    playerLabel.id = String(playerIndex);
     playerIndex++;
 
     const mathTextbox = document.createElement("input");
@@ -157,7 +158,7 @@ submitBtn.onclick = function() {
 
     submitMathBtn.onclick = function() {
         const mathExpression = mathTextbox.value.trim();
-        const currentScore = parseInt(scoreLabel.textContent.split(": ")[1]);
+        const currentScore = parseInt(scoreLabel.textContent!.split(": ")[1]);
 
         // Validate input as a number or math expression
         let delta;
@@ -183,11 +184,11 @@ submitBtn.onclick = function() {
     playerContainer.appendChild(scoreLabel);
 
     // Add player container to active player list
-    const activePlayerList = document.getElementById("activePlayerList");
+    const activePlayerList = document.getElementById("activePlayerList")!;
     activePlayerList.appendChild(playerContainer);
 
     // Clear the player textbox
-    document.getElementById("playerTextbox").value = "";
+    (document.getElementById("playerTextbox") as HTMLInputElement).value = "";
 
     saveGameState();
     // saveToStorage();
@@ -195,21 +196,21 @@ submitBtn.onclick = function() {
 
 // Save game button which will send player-stats to the backend
 const saveGame = () => {
-    let gameStats = {};
-    const saveGameBtn = document.querySelector('#save-btn');
+    let gameStats: Record<string, { name: string; score: number }> = {};
+    const saveGameBtn = document.querySelector('#save-btn')!;
     saveGameBtn.addEventListener('click', () => {
         // Overcomplicated piece of poop
         // Need to get all the player info to send to backend
         const playerStats = document.querySelectorAll('.player-entry');
-        const data = Array.from(playerStats).map(playerStat => playerStat.innerText);
+        const data = Array.from(playerStats).map(playerStat => (playerStat as HTMLElement).innerText);
         for (let i = 0; i < data.length; i++) {
 
             let cleanScore = data[i].split('\n')[2]
-            cleanScore = parseInt(cleanScore.split('Score:')[1]);
+            cleanScore = String(parseInt(cleanScore.split('Score:')[1]));
 
             gameStats[`playerNumber${i}`] = {
                 'name': data[i].split('\n')[0],
-                'score': cleanScore
+                'score': parseInt(cleanScore)
             };
         }
         fetch("/save-score", {
@@ -222,7 +223,7 @@ const saveGame = () => {
 
 // Get highscore button
 const getHighScore = () => {
-    document.querySelector('#highScoreBtn').addEventListener('click', async () => {
+    document.querySelector('#highScoreBtn')!.addEventListener('click', async () => {
         if (!highScoreLoaded) {
             try {
                 const response = await fetch('/get-score');
@@ -237,8 +238,8 @@ const getHighScore = () => {
 
                 getScoreDiv.appendChild(scoreParagraph);
 
-                const target = document.querySelector('#highScoreDiv');
-                target.parentNode.insertBefore(getScoreDiv, target.nextSibling);
+                const target = document.querySelector('#highScoreDiv')!;
+                target.parentNode!.insertBefore(getScoreDiv, target.nextSibling);
                 highScoreLoaded = true;
 
             } catch (err) {
@@ -251,7 +252,7 @@ const getHighScore = () => {
 
 // Inital dealer tag position
 const whoIsDealer = () => {
-    document.getElementById(currentDealerIndex).textContent = '* ' + document.getElementById(currentDealerIndex).textContent;
+    document.getElementById(String(currentDealerIndex))!.textContent = '* ' + document.getElementById(String(currentDealerIndex))!.textContent;
 };
 
 // Make playerbox submit buttons green when clicked

@@ -1,5 +1,3 @@
-declare function greenButton(): void;
-
 function reattachListeners(): void {
     const submitMathBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.submitMathBtns');
     console.log('Found buttons:', submitMathBtns.length);
