@@ -40,8 +40,8 @@ container-clean:
 
 container-push: container-build
 	@echo "Pushing $(IMAGE_NAME) as $(VERSION)..."
-	@$(CONTAINER_ENGINE) tag localhost/$(IMAGE_NAME) ghcr.io/itsachance/3an:$(VERSION)
-	@$(CONTAINER_ENGINE) tag localhost/$(IMAGE_NAME) ghcr.io/itsachance/3an:latest
+	@$(CONTAINER_ENGINE) tag $(IMAGE_NAME) ghcr.io/itsachance/3an:$(VERSION)
+	@$(CONTAINER_ENGINE) tag $(IMAGE_NAME) ghcr.io/itsachance/3an:latest
 	@$(CONTAINER_ENGINE) push ghcr.io/itsachance/3an:$(VERSION)
 	@$(CONTAINER_ENGINE) push ghcr.io/itsachance/3an:latest
 	# Builder-image

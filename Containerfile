@@ -15,4 +15,4 @@ USER appuser
 VOLUME /data
 EXPOSE 5500
 ENTRYPOINT ["/trean"]
-LABEL org.opencontainers.image.source https://github.com/itsachance/3an
+LABEL org.opencontainers.image.source=https://github.com/itsachance/3an
