@@ -18,7 +18,7 @@ type DBModel struct {
 	DB *sql.DB
 }
 
-func (m *DBModel) GetHighscore() (string, int) {
+func (m *DBModel) GetHighscore() (string, int, error) {
 	db := m.DB
 	var score int
 	var name string
@@ -26,10 +26,12 @@ func (m *DBModel) GetHighscore() (string, int) {
 	query := `SELECT score, name FROM scoreboard WHERE score = (SELECT MIN(SCORE) FROM scoreboard);`
 	err := db.QueryRow(query).Scan(&score, &name)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", 0, err
+		}
 		log.Fatal(err)
 	}
-
-	return name, score
+	return name, score, nil
 }
 
 func (m *DBModel) SaveScore(Savedscore *Score) error {
