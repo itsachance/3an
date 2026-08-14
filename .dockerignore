@@ -7,6 +7,9 @@ Dockerfile
 Containerfile
 Makefile
 *.md
-db/
 ui/static/*.ts
 ui/static/tsconfig.json
+.air*
+.github
+LICENSE
+renovate.json
