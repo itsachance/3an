@@ -4,6 +4,7 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /trean ./cmd/web/
 RUN go install github.com/pressly/goose/v3/cmd/goose@v3.27.1
+COPY db/migrations/ /go/db/migrations/
 RUN echo "appuser:x:65534:65534:Appuser:/:" > /etc_passwd
 FROM scratch
 COPY --from=builder /trean /trean
