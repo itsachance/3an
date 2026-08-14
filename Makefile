@@ -46,10 +46,10 @@ container-push: container-build
 	@$(CONTAINER_ENGINE) push ghcr.io/itsachance/3an:latest
 	# Builder-image
 	@echo "Pushing trean-builder as $(VERSION)..."
-	@$(CONTAINER_ENGINE) tag trean-builder:latest ghcr.io/itsachance/3an-builder:$(VERSION)
-	@$(CONTAINER_ENGINE) tag trean-builder:latest ghcr.io/itsachance/3an-builder:latest
-	@$(CONTAINER_ENGINE) push ghcr.io/itsachance/3an-builder:$(VERSION)
-	@$(CONTAINER_ENGINE) push ghcr.io/itsachance/3an-builder:latest
+	@$(CONTAINER_ENGINE) tag trean-builder:latest ghcr.io/itsachance/trean-builder:$(VERSION)
+	@$(CONTAINER_ENGINE) tag trean-builder:latest ghcr.io/itsachance/trean-builder:latest
+	@$(CONTAINER_ENGINE) push ghcr.io/itsachance/trean-builder:$(VERSION)
+	@$(CONTAINER_ENGINE) push ghcr.io/itsachance/trean-builder:latest
 
 ts-compile:
 	@echo "Compiling TypeScript..."
