@@ -1,6 +1,6 @@
 module github.com/ItsAchance/3an
 
-go 1.26.5
+go 1.26.6
 
 tool github.com/a-h/templ/cmd/templ
 
